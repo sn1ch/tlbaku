@@ -1,0 +1,9 @@
+__pycache__/
+*.py[cod]
+video_bot/.env
+.idea
+venv
+*.sqlite3
+/migrations/*
+products/
+
