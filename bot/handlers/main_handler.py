@@ -17,7 +17,7 @@ async def send_welcome(message: types.Message):
 
 
 async def main_menu(message: types.Message):
-    await message.reply('Выбери раздел ROCKETS & BISHOPS', reply_markup=await get_category_markup())
+    await message.reply('Выбери раздел ROCKETS & BISHOPS ', reply_markup=await get_category_markup())
 
 
 async def send_actions(message: types.Message):
