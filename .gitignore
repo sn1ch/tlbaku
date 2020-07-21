@@ -1,9 +1,11 @@
 __pycache__/
 *.py[cod]
-video_bot/.env
+#bot/*.env
+bot/.env
 .idea
 venv
 *.sqlite3
 /migrations/*
 products/
+.env
 
