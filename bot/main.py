@@ -9,6 +9,9 @@ from bot.config import TOKEN, DATABASE_URL, NAME
 
 logging.basicConfig(level=logging.INFO)
 loop = asyncio.get_event_loop()
+
+
+
 # loop.run_until_complete(
 #     Tortoise.init(db_url=f"postgres://admin:admin@localhost/{NAME}", modules={"models": ["__main__"]}))
 

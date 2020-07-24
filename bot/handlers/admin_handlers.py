@@ -84,12 +84,6 @@ def register_admin_handlers(dp: dp):
     dp.register_callback_query_handler(admin_send_products,
                                        navigations.filter(action='admin_subcategory'))
     dp.register_callback_query_handler(update_photo, Text(startswith='product_change_photo'))
-    # dp.register_message_handler(set_photo, lambda message: message.from_user.id in (int(SERG), ANNA),
-    #                             content_types=['photo'])
     dp.register_message_handler(set_photo,
                                 content_types=['photo'], state=ProductPhoto)
 
-    pass
-
-    # dp.register_callback_query_handler(send_subcategory_subcategory, navigations.filter(action='category'))
-    # dp.register_callback_query_handler(send_products, navigations.filter(action='subcategory'))
