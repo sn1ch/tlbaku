@@ -30,7 +30,8 @@ class SubCategory(models.Model):
 class Product(models.Model):
     name = models.CharField(max_length=64, verbose_name='Название')
     slug_name = models.SlugField(verbose_name='slug name(заполняется автоматически)')
-    img = models.ImageField(upload_to='products/%Y/%m/%d/', verbose_name='Изображение')
+    img = models.CharField(max_length=264,
+                           default='AgACAgIAAxkBAAILT18XUe6mdD-g1arbv20TP8Tl00qSAALTrjEbtuu5SF6v994XcN50pXjrki4AAwEAAwIAA3kAAy4MBAABGgQ')
     price = models.SmallIntegerField(verbose_name='Цена')
     subcategory = models.ForeignKey(SubCategory, on_delete=models.CASCADE, verbose_name='Подкатегория')
     beer = models.OneToOneField('Beer', on_delete=models.CASCADE, null=True)

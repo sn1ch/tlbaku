@@ -5,7 +5,7 @@ bot/.env
 .idea
 venv
 *.sqlite3
-/migrations/*
+botbakuadmin/migrations/*
 products/
 .env
 

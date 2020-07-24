@@ -10,7 +10,7 @@ from bot.keyboards.category_mk import get_category_markup
 
 async def send_welcome(message: types.Message):
     print(message)
-    text = await Botbakuadmin_text.filter(slug_name='privetsvie').values_list('text', flat=True)
+    text = await Botbakuadmin_text.filter(slug_name='privetstvie').values_list('text', flat=True)
     # await message.reply(*text, reply_markup=main_markup, parse_mode='HTML')
     await message.reply(*text, reply_markup=await main_markup())
     print(await Botbakuadmin_casino.first())
@@ -25,7 +25,13 @@ async def send_actions(message: types.Message):
     await message.reply(*text)
 
 
+async def photo(message: types.Message):
+    await bot.send_message(message.chat.id, message)
+    await bot.send_message(message.chat.id, message.photo[-1].file_id)
+
+
 def register_start_handlers(dp: dp):
     dp.register_message_handler(send_welcome, commands=['start', 'help'])
     dp.register_message_handler(main_menu, Text(equals=['МЕНЮ ROCKETS & BISHOPS']))
     dp.register_message_handler(send_actions, Text(equals=['АКЦИИ ROCKETS & BISHOPS']))
+    # dp.register_message_handler(photo, content_types=['photo'])

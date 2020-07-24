@@ -1,8 +1,6 @@
 import os
-
 from aiogram import types
 from aiogram.dispatcher import FSMContext
-
 from MyBot.settings import BASE_DIR
 from bot.keyboards.product_mk import kb_add, order_cart
 from bot.state.state import Cart
@@ -48,10 +46,13 @@ async def cart_view_from_msg(message: types.Message, state: FSMContext):
             product = await Botbakuadmin_product.filter(id=product_id)
             cb_page_text = f'{data["page"]}/{len(data["products"])}'
             totals_sum = await total_sum(data['products'])
-            photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
-            await bot.send_photo(message.from_user.id, photo=photo,
-                                 caption=f"<b>{product[0].name}</b>", parse_mode='HTML',
-                                 reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+            # photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
+            # await bot.send_photo(message.from_user.id, photo=photo,
+            #                      caption=f"<b>{product[0].name}</b>", parse_mode='HTML',
+            #                      reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+            await bot.send_photo(message.from_user.id, photo=product[0].img,
+                                 caption=f"<b>{product[0].name}</b>",
+                                 reply_markup=await get_cart_kb(cb_page_text, values, totals_sum), parse_mode='HTML')
     except KeyError:
         await message.answer(text='корзина пуста')
 
@@ -64,10 +65,13 @@ async def cart_view_from_call(call: types.Message, state: FSMContext):
             product = await Botbakuadmin_product.filter(id=product_id)
             cb_page_text = f'{data["page"]}/{len(data["products"])}'
             totals_sum = await total_sum(data['products'])
-            photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
-            await bot.send_photo(call.from_user.id, photo=photo,
-                                 caption=f"<b>{product[0].name}</b>", parse_mode='HTML',
-                                 reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+            # photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
+            # await bot.send_photo(call.from_user.id, photo=photo,
+            #                      caption=f"<b>{product[0].name}</b>", parse_mode='HTML',
+            #                      reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+            await bot.send_photo(call.from_user.id, photo=product[0].img,
+                                 caption=f"<b>{product[0].name}</b>",
+                                 reply_markup=await get_cart_kb(cb_page_text, values, totals_sum), parse_mode='HTML')
         await call.answer()
     except KeyError:
         await call.answer(text='корзина пуста')
@@ -85,12 +89,16 @@ async def get_prev(call: types.CallbackQuery, state: FSMContext):
                 totals_sum = await total_sum(data['products'])
                 cb_page_text = f'{data["page"]}/{len(data["products"])}'
                 await types.ChatActions.upload_photo()
-                photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
-                media = types.InputMediaPhoto(media=photo, caption=f'<b>{product[0].name}</b>',
+                # photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
+                # media = types.InputMediaPhoto(media=photo, caption=f'<b>{product[0].name}</b>',
+                #                               parse_mode='HTML')
+                media = types.InputMediaPhoto(media=product[0].img, caption=f'<b>{product[0].name}</b>',
                                               parse_mode='HTML')
-                await call.message.edit_media(media=media, reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+                await call.message.edit_media(media=media,
+                                              reply_markup=await get_cart_kb(cb_page_text, values, totals_sum))
             else:
                 pass
+
     except KeyError:
         await call.answer(text='OPS. Похоже корзина пуста')
 
@@ -107,10 +115,13 @@ async def get_next(call: types.CallbackQuery, state: FSMContext):
                 totals_sum = await total_sum(data['products'])
                 cb_page_text = f'{data["page"]}/{len(data["products"])}'
                 await types.ChatActions.upload_photo()
-                photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
-                media = types.InputMediaPhoto(media=photo, caption=f'<b>{product[0].name}</b>',
+                # photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
+                # media = types.InputMediaPhoto(media=photo, caption=f'<b>{product[0].name}</b>',
+                #                               parse_mode='HTML')
+                media = types.InputMediaPhoto(media=product[0].img, caption=f'<b>{product[0].name}</b>',
                                               parse_mode='HTML')
-                await call.message.edit_media(media=media, reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+                await call.message.edit_media(media=media,
+                                              reply_markup=await get_cart_kb(cb_page_text, values, totals_sum))
             else:
                 pass
     except KeyError:
@@ -127,7 +138,7 @@ async def get_up_item(call: types.CallbackQuery, state: FSMContext):
                 cb_page_text = f'{data["page"]}/{len(data["products"])}'
                 totals_sum = await total_sum(data['products'])
                 values = data['products'][product_id]
-                await call.message.edit_reply_markup(reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+                await call.message.edit_reply_markup(reply_markup=await get_cart_kb(cb_page_text, values, totals_sum))
             else:
                 pass
     except KeyError:
@@ -144,7 +155,7 @@ async def get_down_item(call: types.CallbackQuery, state: FSMContext):
                 cb_page_text = f'{data["page"]}/{len(data["products"])}'
                 totals_sum = await total_sum(data['products'])
                 values = data['products'][product_id]
-                await call.message.edit_reply_markup(reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+                await call.message.edit_reply_markup(reply_markup=await get_cart_kb(cb_page_text, values, totals_sum))
             else:
                 pass
     except KeyError:
@@ -169,10 +180,13 @@ async def delete_item(call: types.CallbackQuery, state: FSMContext):
                 totals_sum = await total_sum(data['products'])
                 cb_page_text = f'{data["page"]}/{len(data["products"])}'
                 await types.ChatActions.upload_photo()
-                photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
-                media = types.InputMediaPhoto(media=photo, caption=f'<b>{product[0].name}</b>',
+                # photo = types.InputFile(os.path.join(BASE_DIR, product[0].img))
+                # media = types.InputMediaPhoto(media=photo, caption=f'<b>{product[0].name}</b>',
+                #                               parse_mode='HTML')
+                media = types.InputMediaPhoto(media=product[0].img, caption=f'<b>{product[0].name}</b>',
                                               parse_mode='HTML')
-                await call.message.edit_media(media=media, reply_markup=get_cart_kb(cb_page_text, values, totals_sum))
+                await call.message.edit_media(media=media,
+                                              reply_markup=await get_cart_kb(cb_page_text, values, totals_sum))
     except KeyError:
         await call.answer(text='OPS. Похоже корзина пуста')
 

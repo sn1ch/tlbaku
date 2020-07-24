@@ -11,7 +11,7 @@ emoji = {
 }
 
 
-def get_cart_kb(text, items, total_sum=0):
+async def get_cart_kb(text, items, total_sum=0):
     kb = types.InlineKeyboardMarkup(row_width=3)
     left = types.InlineKeyboardButton(text=emoji['prev'], callback_data='prev')
     right = types.InlineKeyboardButton(text=emoji['next'], callback_data='next')

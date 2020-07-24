@@ -7,7 +7,7 @@ class ProductInline(admin.StackedInline):
     model = Product
     extra = 1
     prepopulated_fields = {"slug_name": ("name",)}
-    fields = ['in_stock', 'name', 'slug_name', 'img', 'price', 'subcategory', ]
+    fields = ['in_stock', 'name', 'slug_name', 'price', 'subcategory', ]
     # fieldsets = [
     #     ('Наличие', {'fields': ['in_stock']}),
     #     ('2', {'fields': ['price']}),

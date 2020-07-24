@@ -21,3 +21,7 @@ class Cart(StatesGroup):
     name = State()
     cart = State()
     page = State()
+
+
+class ProductPhoto(StatesGroup):
+    product_id = State()

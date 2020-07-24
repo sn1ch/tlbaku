@@ -1,12 +1,9 @@
-import os
 from aiogram import types
-from aiogram.utils.callback_data import CallbackData
 from bot.main import bot, dp
 from aiogram.dispatcher.filters import Text
 from bot.keyboards.category_mk import navigations, get_subcategory_markup, get_category_markup
 from bot.db.models import Botbakuadmin_subcategory, Botbakuadmin_eat, Botbakuadmin_product, Botbakuadmin_beer, \
     Botbakuadmin_category, Botbakuadmin_text
-from MyBot.settings import BASE_DIR
 from bot.keyboards.product_mk import kb_add
 
 
@@ -29,10 +26,13 @@ async def send_products(call: types.CallbackQuery, callback_data: dict):
             except AttributeError:
                 text = f'<b>{product.name.upper()}</b> <i>{product.beer.style.lower()}</i> ' \
                        f'ABV {product.beer.abv}% IBU {product.beer.ibu} OG {product.beer.og}°P'
-            photo = types.InputFile(os.path.join(BASE_DIR, product.img))
-            await bot.send_photo(call.from_user.id, photo=photo,
-                                 caption=text, parse_mode='HTML',
-                                 reply_markup=await kb_add(price=product.price, id=product.id))
+            # photo = types.InputFile(os.path.join(BASE_DIR, product.img))
+            # await bot.send_photo(call.from_user.id, photo=photo,
+            #                      caption=text, parse_mode='HTML',
+            #                      reply_markup=await kb_add(price=product.price, id=product.id))
+            await bot.send_photo(call.from_user.id, photo=product.img,
+                                 caption=text,
+                                 reply_markup=await kb_add(product.price, product.id), parse_mode='HTML')
     subcategory = await Botbakuadmin_subcategory.filter(slug_name=callback_data['slug_name']).prefetch_related(
         'category').values_list('category__slug_name', flat=True)
     await bot.send_message(call.from_user.id, text=f'Всего позиций {len(products)}',
